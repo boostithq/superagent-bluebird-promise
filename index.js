@@ -63,7 +63,11 @@ Request.prototype.promise = function() {
 
   return new Promise(function(resolve, reject, onCancel) {
       req.end(function(err, res) {
-        if (typeof res !== "undefined" && res.status >= 400) {
+        if (res.status === 401) {
+          // 401 Failed to Authenticate
+          // Special case: treat it as a success and re-authorize.
+          resolve(res);
+        } else if (typeof res !== "undefined" && res.status >= 400) {
           var msg = 'cannot ' + req.method + ' ' + req.url + ' (' + res.status + ')';
           error = new SuperagentPromiseError(msg);
           error.status = res.status;
