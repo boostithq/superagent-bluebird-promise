@@ -63,7 +63,7 @@ Request.prototype.promise = function() {
 
   return new Promise(function(resolve, reject, onCancel) {
       req.end(function(err, res) {
-        if (res.status === 401) {
+        if (typeof res !== "undefined" && res.status === 401) {
           // 401 Failed to Authenticate
           // Special case: treat it as a success and re-authorize.
           resolve(res);
